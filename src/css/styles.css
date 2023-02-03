@@ -41,4 +41,10 @@ body {
 
 .country-flagname {
   display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.country-property {
+  font-weight: 700;
 }

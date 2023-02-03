@@ -18,20 +18,21 @@ function onInputField(event) {
         .then(countries => {
             if (countries.length > 10) {
                 Notiflix.Notify.info('Too many matches found. Please enter a more specific name.');
+                refs.requestList.innerHTML = '';
             } else if (countries.length > 2 && countries.length < 10) {
                 refs.requestList.insertAdjacentHTML('beforeend', listItemsMarkup(countries));
+                refs.countryInfoContainer.innerHTML = '';
             } else if (countries.length === 1) {
-
+                refs.countryInfoContainer.insertAdjacentHTML('beforeend', countryCardMarkup(countries));
+                refs.requestList.innerHTML = '';
+            } else if (!countries) {
+                Notiflix.Notify.failure('Qui timide rogat docet negare');
             }
         })
+        .catch(error => {
+            Notiflix.Notify.failure('Qui timide rogat docet negare');
+        })
 }
-
-// const country = fetchCountries('Uk');
-
-// country
-//     .then(result => {
-//         console.log(result);
-//     })
 
 function listItemsMarkup(countries) {
     return countries
@@ -45,21 +46,27 @@ function listItemsMarkup(countries) {
 }
 
 function countryCardMarkup(country) {
-    return countries
+    return country
         .map(({ name, flags, capital, population, languages }) => {
             return `
                 <div class="country-flagname">
                     <img src="${flags.svg}" alt="${name.official}" width="80" height="40">
                     <h2>${name.official}</h2>
                 </div>
-                <p><span>Capital: </span>${capital}</p>
-                <p><span>Population: </span>${population}</p>
-                <p><span>Languages: </span>${languages}</p>
+                <p><span class="country-property">Capital: </span>${capital}</p>
+                <p><span class="country-property">Population: </span>${population}</p>
+                <p><span class="country-property">Languages: </span>${Object.values(languages)}</p>
             `;}).join('');
 }
 
 
-// refs.requestList.insertAdjacentHTML('beforeend', galleryItemsMarkup(galleryItems));
+// const country = fetchCountries('Uk');
+
+// country
+//     .then(result => {
+//         console.log(result);
+//     })
+
 
 // Notiflix.Notify.success('Sol lucet omnibus');
 // Notiflix.Notify.failure('Qui timide rogat docet negare');
