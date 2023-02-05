@@ -11,28 +11,42 @@ const refs = {
     countryInfoContainer: document.querySelector('.country-info'),
 }
 
+const requestListDestroy = function() {
+    refs.requestList.innerHTML = '';
+}
+
+const countryInfoContainerDestroy = function() {
+    refs.countryInfoContainer.innerHTML = '';
+}
+
 refs.inputField.addEventListener('input', debounce(onInputField, DEBOUNCE_DELAY));
 
 function onInputField(event) {
+    console.log(event.target.value);
+    if (event.target.value === '') {
+        requestListDestroy();
+        countryInfoContainerDestroy();
+        return;
+    }
     fetchCountries(event.target.value)
         .then(countries => {
-            console.log(countries);
+            // console.log(countries);
             if (countries.length > 10) {
                 Notiflix.Notify.info('Too many matches found. Please enter a more specific name.');
-                refs.countryInfoContainer.innerHTML = '';
-                refs.requestList.innerHTML = '';
+                requestListDestroy();
+                countryInfoContainerDestroy();
             } else if (countries.length > 2 && countries.length < 10) {
-                refs.countryInfoContainer.innerHTML = '';
+                countryInfoContainerDestroy();
                 refs.requestList.insertAdjacentHTML('beforeend', listItemsMarkup(countries));
             } else if (countries.length === 1) {
-                refs.requestList.innerHTML = '';
+                requestListDestroy();
                 refs.countryInfoContainer.insertAdjacentHTML('beforeend', countryCardMarkup(countries));
             } else if (!countries) {
-                Notiflix.Notify.failure('Qui timide rogat docet negare');
+                Notiflix.Notify.failure('Oops, there is no country with that name');
             }
         })
         .catch(error => {
-            Notiflix.Notify.failure('Qui timide rogat docet negare');
+            Notiflix.Notify.failure('Oops, there is no country with that name');
         })
 }
 
@@ -60,12 +74,3 @@ function countryCardMarkup(country) {
                 <p><span class="country-property">Languages: </span>${Object.values(languages)}</p>
             `;}).join('');
 }
-
-
-
-
-
-// Notiflix.Notify.success('Sol lucet omnibus');
-// Notiflix.Notify.failure('Qui timide rogat docet negare');
-// Notiflix.Notify.warning('Memento te hominem esse');
-// Notiflix.Notify.info('Cogito ergo sum');
