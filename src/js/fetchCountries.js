@@ -1,4 +1,4 @@
- function fetchCountries(country) {
+function fetchCountries(country) {
     const queryOptions = '?fields=name,capital,population,flags,languages';
     return fetch(`https://restcountries.com/v3.1/name/${country.toLowerCase()}${queryOptions}`)
     .then(response => {
@@ -7,3 +7,10 @@
 }
 
 export { fetchCountries };
+
+
+// export default class FetchCountries {
+//     constructor() {
+//         this.searchQuery
+//     }
+// }

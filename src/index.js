@@ -16,15 +16,17 @@ refs.inputField.addEventListener('input', debounce(onInputField, DEBOUNCE_DELAY)
 function onInputField(event) {
     fetchCountries(event.target.value)
         .then(countries => {
+            console.log(countries);
             if (countries.length > 10) {
                 Notiflix.Notify.info('Too many matches found. Please enter a more specific name.');
+                refs.countryInfoContainer.innerHTML = '';
                 refs.requestList.innerHTML = '';
             } else if (countries.length > 2 && countries.length < 10) {
-                refs.requestList.insertAdjacentHTML('beforeend', listItemsMarkup(countries));
                 refs.countryInfoContainer.innerHTML = '';
+                refs.requestList.insertAdjacentHTML('beforeend', listItemsMarkup(countries));
             } else if (countries.length === 1) {
-                refs.countryInfoContainer.insertAdjacentHTML('beforeend', countryCardMarkup(countries));
                 refs.requestList.innerHTML = '';
+                refs.countryInfoContainer.insertAdjacentHTML('beforeend', countryCardMarkup(countries));
             } else if (!countries) {
                 Notiflix.Notify.failure('Qui timide rogat docet negare');
             }
@@ -60,12 +62,7 @@ function countryCardMarkup(country) {
 }
 
 
-// const country = fetchCountries('Uk');
 
-// country
-//     .then(result => {
-//         console.log(result);
-//     })
 
 
 // Notiflix.Notify.success('Sol lucet omnibus');
