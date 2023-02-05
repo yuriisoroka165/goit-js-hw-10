@@ -11,41 +11,36 @@ const refs = {
     countryInfoContainer: document.querySelector('.country-info'),
 }
 
-const requestListDestroy = function() {
+const destroyOldElements = () => {
     refs.requestList.innerHTML = '';
-}
-
-const countryInfoContainerDestroy = function() {
     refs.countryInfoContainer.innerHTML = '';
-}
+};
 
 refs.inputField.addEventListener('input', debounce(onInputField, DEBOUNCE_DELAY));
 
 function onInputField(event) {
-    console.log(event.target.value);
     if (event.target.value === '') {
-        requestListDestroy();
-        countryInfoContainerDestroy();
+        destroyOldElements();
         return;
     }
-    fetchCountries(event.target.value)
+    fetchCountries(event.target.value.trim())
         .then(countries => {
-            // console.log(countries);
             if (countries.length > 10) {
                 Notiflix.Notify.info('Too many matches found. Please enter a more specific name.');
-                requestListDestroy();
-                countryInfoContainerDestroy();
-            } else if (countries.length > 2 && countries.length < 10) {
-                countryInfoContainerDestroy();
+                destroyOldElements();
+            } else if (countries.length >= 2 && countries.length <= 10) {
+                destroyOldElements();
                 refs.requestList.insertAdjacentHTML('beforeend', listItemsMarkup(countries));
             } else if (countries.length === 1) {
-                requestListDestroy();
+                destroyOldElements();
                 refs.countryInfoContainer.insertAdjacentHTML('beforeend', countryCardMarkup(countries));
             } else if (!countries) {
+                destroyOldElements();
                 Notiflix.Notify.failure('Oops, there is no country with that name');
             }
         })
         .catch(error => {
+            destroyOldElements();
             Notiflix.Notify.failure('Oops, there is no country with that name');
         })
 }

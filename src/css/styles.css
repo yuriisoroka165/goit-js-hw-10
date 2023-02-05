@@ -16,8 +16,9 @@ body {
 #search-box {
   font: inherit;
   padding: 8px;
-  max-width: 320px;
+  width: 400px;
   margin-bottom: 16px;
+  border-radius: 10px;
 }
 
 .country-list {
@@ -30,7 +31,6 @@ body {
   display: flex;
   gap: 10px;
   align-items: center;
-  /* outline: 1px solid gray; */
   margin-bottom: 10px;
   width: 100%;
 }
